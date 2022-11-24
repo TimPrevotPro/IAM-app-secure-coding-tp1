@@ -2,12 +2,13 @@
   "name": "node-ts-template",
   "version": "1.0.0",
   "description": "Basic template of a node + typescript project",
-  "main": "dist/index.js",
+  "main": "dist/src/index.js",
   "scripts": {
     "build": "rmdir /s /q dist && tsc",
     "lint": "eslint --fix src",
     "test": "jest",
-    "start": "node dist/index.js"
+    "start": "node dist/src/index.js",
+    "migrations:migrate": "typeorm-ts-node-commonjs migration:run"
   },
   "author": "Thomas VEILLARD",
   "license": "ISC",
