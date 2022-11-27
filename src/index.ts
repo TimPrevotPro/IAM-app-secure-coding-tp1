@@ -1,8 +1,10 @@
 import {AppDataSource} from "./data-source"
 import {User} from "./entities/user"
+import {dropUserTable} from "./specs/helper";
 
 AppDataSource.initialize().then(async () => {
-
+    console.log('Dropping user table...');
+    await dropUserTable();
     console.log("Inserting a new user into the database...")
     await createUser("Timber", "Saw", 'test', 'passwordtest');
 }).catch(error => console.log(error))
@@ -14,7 +16,6 @@ export async function createUser(firstName: string, lastName: string, email: str
     user.email = email;
     user.passwordHash = passwordHash;
     if (!user.email || !user.passwordHash || user.email === '' || user.passwordHash === '') {
-        console.log('raising error...');
         throw new Error('email or password is invalid.');
     } else {
         await AppDataSource.getRepository(User).save(user)
