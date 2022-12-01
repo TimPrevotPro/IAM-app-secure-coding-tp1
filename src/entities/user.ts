@@ -1,7 +1,30 @@
-import {Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {BeforeInsert, BeforeUpdate, Column, Entity, PrimaryGeneratedColumn} from "typeorm";
+import {ValidationError} from "../validation-error";
 
 @Entity()
 export class User {
+
+    @BeforeInsert() checkInsert = () => {
+        if (!this.firstName || this.firstName === '')
+            throw new ValidationError('User informations are invalid.', 'user', 'firstName');
+        if (!this.lastName || this.lastName === '')
+            throw new ValidationError('User informations are invalid', 'user', 'lastName');
+        if (!this.email || this.email === '')
+            throw new ValidationError('User informations are invalid', 'user', 'email');
+        if (!this.passwordHash || this.passwordHash === '')
+            throw new ValidationError('User informations are invalid', 'user', 'password');
+    };
+
+    @BeforeUpdate() checkUpdate = () => {
+        if (!this.firstName || this.firstName === '')
+            throw new ValidationError('User informations are invalid.', 'user', 'firstName');
+        if (!this.lastName || this.lastName === '')
+            throw new ValidationError('User informations are invalid', 'user', 'lastName');
+        if (!this.email || this.email === '')
+            throw new ValidationError('User informations are invalid', 'user', 'email');
+        if (!this.passwordHash || this.passwordHash === '')
+            throw new ValidationError('User informations are invalid', 'user', 'password');
+    }
 
     constructor(id?: number, firstName?: string, lastName?: string, email?: string, passwordHash?: string) {
         if (id !== undefined)
