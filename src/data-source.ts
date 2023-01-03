@@ -2,6 +2,7 @@ import "reflect-metadata";
 import {DataSource} from "typeorm";
 import * as dotenv from 'dotenv';
 import {User} from "./entities/user";
+import {UpdateSubscriber} from "./entities/update-subscriber";
 
 dotenv.config();
 
@@ -15,7 +16,7 @@ export const AppDataSource = new DataSource({
     synchronize: true,
     logging: false,
     entities: [User],
-    subscribers: [],
+    subscribers: [UpdateSubscriber],
     migrations: [],
     schema: getSchema(),
 })
@@ -30,7 +31,6 @@ function checkPgPort(): number {
 
 function getSchema(): string {
     let schemaName = "";
-    let env = process.env.NODE_ENV;
 
     if (process.env.NODE_ENV === "production") {
         schemaName = "public";
