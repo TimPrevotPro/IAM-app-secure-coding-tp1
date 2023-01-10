@@ -5,7 +5,7 @@ import {Repository} from "typeorm";
 import {createUser} from "../../index";
 
 import {dropUserTable} from "../helper";
-import {ValidationError} from "class-validator";
+import {validate, ValidationError} from "class-validator";
 
 let userRepository: Repository<User>;
 
@@ -26,7 +26,7 @@ describe('user module', () => {
     describe('Validations', () => {
         test('Should create a new user in the database', async () => expect(await createUser('Timber', 'Saw', 'test', 'passwordtest'))
             .toMatchObject({
-                    id: await userRepository.count() + 1,
+                    id: await userRepository.count(),
                     firstName: "Timber",
                     lastName: "Saw",
                     email: "test",
@@ -34,9 +34,14 @@ describe('user module', () => {
                 }
             ));
         test('Should raise error if email is missing', () => {
+            const newUser = new User();
+            newUser.firstName = 'Timber2';
+            newUser.lastName = 'Saw';
+            newUser.email = '';
+            newUser.passwordHash = 'passwordtest';
             void expect(async () => {
-                await createUser('Timber2', 'Saw', '', 'passwordtest');
-            }).resolves.toThrow(ValidationError);
+                await validate(newUser);
+            }).resolves.toThrowError(ValidationError);
         });
         test('Should raise error if password is missing', async () => {
             const user = new User();
@@ -47,7 +52,7 @@ describe('user module', () => {
             user.passwordHash = '';
             void expect(async () => {
                 await userRepository.save(user);
-            }).resolves.toThrow(ValidationError);
+            }).resolves.toThrowError(ValidationError);
         })
     });
 

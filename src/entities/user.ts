@@ -1,6 +1,6 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { ValidationError } from "../validation-error";
-import {IsEmail, IsString, Length} from "class-validator";
+import {IsEmail, isNotEmpty, IsNotEmpty, IsString, Length} from "class-validator";
 
 @Entity()
 export class User {
@@ -22,18 +22,19 @@ export class User {
     id!: number;
 
     @Column({ nullable: false })
-    @IsString()
+    @IsNotEmpty()
     firstName!: string;
 
     @Column({ nullable: false })
-    @IsString()
+    @IsNotEmpty()
     lastName!: string;
 
     @Column({ nullable: false })
-    @IsEmail()
+    @IsNotEmpty()
     email!: string;
 
     @Column({ nullable: false })
     @Length(8, 24)
+    @IsNotEmpty()
     passwordHash!: string;
 }
