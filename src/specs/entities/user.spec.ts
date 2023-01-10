@@ -26,7 +26,7 @@ describe('user module', () => {
     describe('Validations', () => {
         test('Should create a new user in the database', async () => expect(await createUser('Timber', 'Saw', 'test', 'passwordtest'))
             .toMatchObject({
-                    id: await userRepository.count(),
+                    id: 1,
                     firstName: "Timber",
                     lastName: "Saw",
                     email: "test",

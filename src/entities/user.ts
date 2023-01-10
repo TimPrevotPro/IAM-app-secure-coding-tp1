@@ -1,6 +1,7 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { ValidationError } from "../validation-error";
 import {IsEmail, isNotEmpty, IsNotEmpty, IsString, Length} from "class-validator";
+import {UniqueInColumn} from "../unique-in-column.decorator";
 
 @Entity()
 export class User {
@@ -29,8 +30,16 @@ export class User {
     @IsNotEmpty()
     lastName!: string;
 
-    @Column({ nullable: false })
+    @Column({
+        unique: true,
+        transformer: {
+            to: (value: string) => value.toString().toLowerCase(),
+            from: (value: string) => value,
+        },
+        nullable: false,
+    })
     @IsNotEmpty()
+    @UniqueInColumn( { caseSensitive: false }, { message: 'This email is already linked to an account !' })
     email!: string;
 
     @Column({ nullable: false })
