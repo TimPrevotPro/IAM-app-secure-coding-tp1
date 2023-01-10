@@ -6,9 +6,10 @@ import {ValidationError} from "./validation-error";
 AppDataSource.initialize().then(async () => {
     console.log("Inserting a new user into the database...")
     await createUser("Timber", "Saw", 'test', 'passwordtest');
+    await createUser("Timber2", "Saw", 'test', '');
 }).catch(error => console.log(error))
 
-export async function createUser(firstName: string, lastName: string, email: string, passwordHash: string): Promise<User | null | ValidationError> {
+export async function createUser(firstName: string, lastName: string, email: string, passwordHash: string): Promise<User | null> {
     const user = new User()
     user.firstName = firstName;
     user.lastName = lastName;
